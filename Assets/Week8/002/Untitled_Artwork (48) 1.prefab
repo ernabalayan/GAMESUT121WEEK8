@@ -124,6 +124,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0b800f5cadc7b745a1da57d8d22d852, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxNumberOfEnemies: 0
+  maxNumberOfEnemies: 5
   enemy: {fileID: 6890269259776604752}
   player: {fileID: 5949717293811887569, guid: 40504ba44ff32274b81ce78d0a5a8079, type: 3}

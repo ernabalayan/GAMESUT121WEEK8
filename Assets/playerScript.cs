@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class playerScript : MonoBehaviour
 {
+    public static playerScript instance;
     public Rigidbody2D rb;
     public float moveSpeed;
     public float xInput;
@@ -15,7 +16,7 @@ public class playerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       
+        instance = this;
     
     }
 

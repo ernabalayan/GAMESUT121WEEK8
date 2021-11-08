@@ -27,6 +27,8 @@ public class MyPathSystem : MonoBehaviour {
     public GameObject[] cellPrefabs;
     Coroutine createPathCoroutine;
     public GameObject player;
+    public GameObject enemy;
+    public GameObject coin;
 
     private void Update()
     {
@@ -84,16 +86,26 @@ public class MyPathSystem : MonoBehaviour {
             for (int x = 0; x < pathLength; x++)
             {
                 float noiseValue = Mathf.PerlinNoise((noiseBase + x) * noiseScale, (noiseBase + y) * noiseScale);
-
+              
                 GridCell cell = new GridCell(initialPos + new Vector2(x, y), noiseValue > noiseThreshold ? cellPrefabs[0] : cellPrefabs[1]);
                 //cell.gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, noiseValue);
 
                 gridCellList[y].Add(cell);
 
+                 if(noiseValue > noiseThreshold && random.NextDouble() < 0.01)
+                 {
+                    
+                     GameObject e =  Instantiate(enemy, new Vector3(initialPos.x + x,initialPos.y + y, -4), Quaternion.identity);
+ 
+                }
+                if (noiseValue > noiseThreshold && random.NextDouble() < 0.02)
+                {
+                    GameObject b = Instantiate(coin, new Vector3(initialPos.x + x, initialPos.y + y, -4), Quaternion.identity);
+                } 
                 yield return null;
             }
         }
-
+       
         Vector2 currentCell = initialPos;
         Vector2 finalCell = initialPos + new Vector2(pathLength, pathLength);
        while (currentCell.x < finalCell.x && currentCell.y < finalCell.y)
