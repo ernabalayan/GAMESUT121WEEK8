@@ -92,7 +92,7 @@ public class MyPathSystem : MonoBehaviour {
         Vector2 finalCell = initialPos + new Vector2(pathLength, pathLength);
         while (currentCell.x < finalCell.x && currentCell.y < finalCell.y)
         {
-            bool direction = random.NextDouble();
+            random.NextDouble();
             if (currentCell.x >= finalCell.x)
             {
                 currentCell.y += 1;
@@ -101,12 +101,10 @@ public class MyPathSystem : MonoBehaviour {
             {
                 currentCell.x += 1;
             }
-            else if (direction)
-            {
-                currentCell.x += 1;
-            }
+            
             else
             {
+                currentCell.x += 1;
                 currentCell.y += 1;
             }
 
