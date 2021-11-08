@@ -5,6 +5,7 @@ using System;
 
 public class MyPathSystem : MonoBehaviour {
 
+
     public enum SeedType { RANDOM, CUSTOM }
     [Header("Random Data")]
     public SeedType seedType = SeedType.RANDOM;
@@ -14,12 +15,26 @@ public class MyPathSystem : MonoBehaviour {
 
     [Space]
     public bool animatedPath;
-    public List<GridCell> gridCellList = new List<GridCell>();
+    public List<List<GridCell>> gridCellList = new List<List<GridCell>>();
     public int pathLength = 10;
 
     [Range(1.0f, 7.0f)]
     public float cellSize = 1.0f;
 
+    public float noiseScale;
+    [Range(0f, 1f)] public float noiseThreshold;
+
+    public GameObject[] cellPrefabs;
+    Coroutine createPathCoroutine;
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            SetSeed();
+            CreatePath();
+        }
+    }
 
     void SetSeed() {
         if (seedType == SeedType.RANDOM)
@@ -28,71 +43,106 @@ public class MyPathSystem : MonoBehaviour {
             random = new System.Random(seed);
     }
 
-    void CreatePath() {
+    void CreatePath()
+    {
+        if (createPathCoroutine != null)
+        {
+            StopCoroutine(createPathCoroutine);
+        }
+
+        createPathCoroutine = StartCoroutine(CreatePathRoutine());
+    }
+
+
+
+    IEnumerator CreatePathRoutine()
+    {
+        for (int i = 0; i < gridCellList.Count; i++)
+        {
+            for (int j = 0; j < gridCellList[i].Count; j++)
+            {
+                Destroy(gridCellList[i][j].gameObject);
+            }
+        }
         gridCellList.Clear();
+
         Vector2 currentPosition = new Vector2(-15.0f, -9.0f);
+        Vector2 initialPos = currentPosition;
 
-        gridCellList.Add(new GridCell(currentPosition));
+        float noiseBase = random.Next(-100000, 100000);
 
-        for (int i = 0; i < pathLength; i++) {
+        for (int y = 0; y < pathLength; y++)
+        {
+            gridCellList.Add(new List<GridCell>());
 
-            int n = random.Next(100);
+            for (int x = 0; x < pathLength; x++)
+            {
+                float noiseValue = Mathf.PerlinNoise((noiseBase + x) * noiseScale, (noiseBase + y) * noiseScale);
 
-            if (n > 0 && n < 49) {
-                currentPosition = new Vector2(currentPosition.x + cellSize, currentPosition.y);
+                GridCell cell = new GridCell(initialPos + new Vector2(x, y), noiseValue > noiseThreshold ? cellPrefabs[0] : cellPrefabs[1]);
+                //cell.gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, noiseValue);
+
+                gridCellList[y].Add(cell);
+
+                yield return null;
             }
-            else {
-                currentPosition = new Vector2(currentPosition.x, currentPosition.y + cellSize);
-            }
-
-            gridCellList.Add(new GridCell(currentPosition));
-
         }
-    }
 
-
-    IEnumerator CreatePathRoutine() {
-        gridCellList.Clear();
-        Vector2 currentPosition = new Vector2(-15.0f, -9.0f);
-
-        gridCellList.Add(new GridCell(currentPosition));
-
-        for (int i = 0; i < pathLength; i++) {
-
-            int n = random.Next(100);
-
-            if (n > 0 && n < 49) {
-                currentPosition = new Vector2(currentPosition.x + cellSize, currentPosition.y);
+        Vector2 currentCell = initialPos;
+        Vector2 finalCell = initialPos + new Vector2(pathLength, pathLength);
+        while (currentCell.x < finalCell.x && currentCell.y < finalCell.y)
+        {
+            bool direction = random.NextDouble();
+            if (currentCell.x >= finalCell.x)
+            {
+                currentCell.y += 1;
             }
-            else {
-                currentPosition = new Vector2(currentPosition.x, currentPosition.y + cellSize);
+            else if (currentCell.y >= finalCell.y)
+            {
+                currentCell.x += 1;
             }
-
-            gridCellList.Add(new GridCell(currentPosition));
-            yield return null;
-        }
-    }
-
-
-    private void OnDrawGizmos() {
-        for (int i = 0; i < gridCellList.Count; i++) {
-            Gizmos.color = Color.white;
-            Gizmos.DrawWireCube(gridCellList[i].location, Vector2.one * cellSize);
-            Gizmos.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
-            Gizmos.DrawCube(gridCellList[i].location, Vector2.one * cellSize);
-        }
-    }
-
-    private void Update() {
-        if (Input.GetKeyDown(KeyCode.Space)) {
-
-            SetSeed();
-            if (animatedPath) {
-                StartCoroutine(CreatePathRoutine());
+            else if (direction)
+            {
+                currentCell.x += 1;
             }
             else
-                CreatePath();
+            {
+                currentCell.y += 1;
+            }
+
+
+
+            yield return null;
         }
+
+        createPathCoroutine = null;
     }
+
+    //IEnumerator CreatePathRoutine()
+    //{
+    //    gridCellList.Clear();
+    //    Vector2 currentPosition = new Vector2(-15.0f, -20.0f);
+    //    Vector2 initialPos = currentPosition;
+    //    gridCellList.Add(new GridCell(currentPosition, cellPrefabs[0]));
+
+    //    for (int i = 0; i < pathLength; i++)
+    //    {
+
+    //        int n = random.Next(100);
+
+    //        if (n > 0 && n < 49)
+    //        {
+    //            currentPosition = new Vector2(currentPosition.x + cellSize, currentPosition.y);
+
+    //        }
+    //        else
+    //        {
+    //            currentPosition = new Vector2(currentPosition.x, currentPosition.y + cellSize);
+    //        }
+
+
+    //        yield return null;
+    //    }
+    //}
 
 }

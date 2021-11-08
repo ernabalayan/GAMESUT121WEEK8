@@ -66,10 +66,11 @@ public class MyGridSystem : MonoBehaviour {
 public class GridCell {
 
     public Vector2 location;
-
+    public GameObject gameObject;
     public GridCell() { }
-    public GridCell(Vector2 l) {
+    public GridCell(Vector2 l, GameObject prefab) {
         location = new Vector2(l.x, l.y);
+        gameObject = GameObject.Instantiate(prefab, l, Quaternion.identity);
     }
     public GridCell(float x, float y) {
         location = new Vector2(x, y);
