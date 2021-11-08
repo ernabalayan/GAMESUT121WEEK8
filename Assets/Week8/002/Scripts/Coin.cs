@@ -17,9 +17,16 @@ public class Coin : MonoBehaviour
  
     void Start()
     {
+        coinText = GameObject.Find("CoinText").GetComponent<Text>();
         coinText.text = "Score: " + score;
         spriteRenderer.enabled = true;
         boxCollider.enabled = true;
+        for (int i = 0; i < maxNumberOfCoins; i++)
+        {
+            float x = Random.Range(-8.0f, 8.0f);
+            float y = Random.Range(-5.0f, 5.0f);
+            GameObject b = Instantiate(coin, new Vector3(x, y), Quaternion.identity);
+        }
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -30,12 +37,7 @@ public class Coin : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        for (int i = 0; i < maxNumberOfCoins; i++)
-        {
-            float x = Random.Range(-8.0f, 8.0f);
-            float y = Random.Range(-5.0f, 5.0f);
-            GameObject b = Instantiate(coin, new Vector3(x, y), Quaternion.identity);
-        }
+
 
     }
 }

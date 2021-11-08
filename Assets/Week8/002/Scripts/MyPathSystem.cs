@@ -26,6 +26,7 @@ public class MyPathSystem : MonoBehaviour {
 
     public GameObject[] cellPrefabs;
     Coroutine createPathCoroutine;
+    public GameObject player;
 
     private void Update()
     {
@@ -35,7 +36,12 @@ public class MyPathSystem : MonoBehaviour {
             CreatePath();
         }
     }
-
+    public void CreateNewPath()
+    {
+        SetSeed();
+        CreatePath();
+        player.transform.position = new Vector3(-1, -8, -3);
+    }
     void SetSeed() {
         if (seedType == SeedType.RANDOM)
             random = new System.Random();
@@ -90,9 +96,9 @@ public class MyPathSystem : MonoBehaviour {
 
         Vector2 currentCell = initialPos;
         Vector2 finalCell = initialPos + new Vector2(pathLength, pathLength);
-        while (currentCell.x < finalCell.x && currentCell.y < finalCell.y)
-        {
-            random.NextDouble();
+       while (currentCell.x < finalCell.x && currentCell.y < finalCell.y)
+       {
+           bool direction =  random.NextDouble() > 0.5;
             if (currentCell.x >= finalCell.x)
             {
                 currentCell.y += 1;
@@ -101,17 +107,18 @@ public class MyPathSystem : MonoBehaviour {
             {
                 currentCell.x += 1;
             }
-            
-            else
+            else if (direction)
             {
                 currentCell.x += 1;
+            }
+            else
+            {
+
                 currentCell.y += 1;
             }
 
-
-
-            yield return null;
-        }
+         yield return null;
+          }
 
         createPathCoroutine = null;
     }

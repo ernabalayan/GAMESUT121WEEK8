@@ -23,6 +23,10 @@ public class playerScript : MonoBehaviour
     void Update()
     {
         MoveControl();
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            transform.position = new Vector3(-2, -8, -3);
+        }
     }
     void MoveControl()
     {
