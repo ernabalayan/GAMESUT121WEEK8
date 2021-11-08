@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Enemy : MonoBehaviour
 {
@@ -14,8 +15,8 @@ public class Enemy : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        FindObjectOfType<MyPathSystem>().CreateNewPath();
-        player.transform.position = new Vector3(-1, -8, -3);
+
+        SceneManager.LoadScene(0);
         Debug.Log("destroyed player");
     }
     // Update is called once per frame

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -2423420356794182385}
   m_Layer: 0
   m_Name: coin
-  m_TagString: Untagged
+  m_TagString: coin
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -124,9 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7896b27ceab250f41b1721d52bc535a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coinText: {fileID: 1539908860515440993, guid: 4c645b02a86ca4f489b717d6af9b5f2e, type: 3}
   boxCollider: {fileID: 8829353697396310323}
   spriteRenderer: {fileID: 5359837268125056722}
-  score: 0
   coin: {fileID: 6283405217305948486}
   maxNumberOfCoins: 10

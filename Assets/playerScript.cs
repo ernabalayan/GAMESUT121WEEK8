@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class playerScript : MonoBehaviour
 {
@@ -13,9 +14,14 @@ public class playerScript : MonoBehaviour
     public bool moveUp;
     public bool moveRight;
     public bool moveDown;
+    public Text coinText;
+    public GameObject coin;
+    public int score;
+    
     // Start is called before the first frame update
     void Start()
     {
+    
         instance = this;
     
     }
@@ -23,11 +29,22 @@ public class playerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        coinText.text = "Score: " + score;
         MoveControl();
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            transform.position = new Vector3(-2, -8, -3);
+            transform.position = new Vector3(-12, -10, 0);
         }
+
+        Debug.Log(score);
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "coin")
+        {
+            score++;
+        }
+
     }
     void MoveControl()
     {

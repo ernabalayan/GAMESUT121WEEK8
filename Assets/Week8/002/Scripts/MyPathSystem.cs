@@ -29,20 +29,33 @@ public class MyPathSystem : MonoBehaviour {
     public GameObject player;
     public GameObject enemy;
     public GameObject coin;
+    public GameObject startText;
 
+    private void Start()
+    {
+        player.GetComponent<SpriteRenderer>().enabled = false;
+        player.GetComponent<BoxCollider2D>().enabled = false;
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            player.GetComponent<SpriteRenderer>().enabled = true;
+            player.GetComponent<BoxCollider2D>().enabled = true;
             SetSeed();
             CreatePath();
+            if (startText)
+            {
+                Destroy(startText);
+            }
         }
     }
     public void CreateNewPath()
     {
+        GetComponent<playerScript>().score = 0;
         SetSeed();
         CreatePath();
-        player.transform.position = new Vector3(-1, -8, -3);
+        player.transform.position = new Vector3(-12, -10, 0);
     }
     void SetSeed() {
         if (seedType == SeedType.RANDOM)
